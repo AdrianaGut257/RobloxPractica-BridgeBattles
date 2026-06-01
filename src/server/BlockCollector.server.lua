@@ -1,39 +1,46 @@
 local Players = game:GetService("Players")
+local cubitos = workspace:WaitForChild("Cubitos")
 
-local block = workspace:WaitForChild("Block1")
+local recogido = false
 
-local collected = false
+for _, part in ipairs(cubitos:GetChildren()) do
+	if part:IsA("Part") then
 
-block.Touched:Connect(function(hit)
-	if collected then
-		return
+		part.Touched:Connect(function(hit)
+
+			if recogido then
+				return
+			end
+
+			local character = hit.Parent
+			local player = Players:GetPlayerFromCharacter(character)
+
+			if not player then
+				return
+			end
+
+			recogido = true
+
+			local hand = character:FindFirstChild("RightHand")
+
+			if hand then
+				local newPart = Instance.new("Part")
+				newPart.Name = "CarriedBlock"
+				newPart.Size = Vector3.new(2,2,2)
+				newPart.Color = Color3.fromRGB(85,170,255)
+				newPart.Anchored = false
+				newPart.CanCollide = false
+				newPart.Parent = character
+
+				newPart.CFrame = hand.CFrame * CFrame.new(0,0,-1)
+
+				local weld = Instance.new("WeldConstraint")
+				weld.Part0 = hand
+				weld.Part1 = newPart
+				weld.Parent = newPart
+			end
+
+		end)
+
 	end
-
-	local character = hit.Parent
-	local player = Players:GetPlayerFromCharacter(character)
-
-	if not player then
-		return
-	end
-
-	collected = true
-
-	local hand = character:FindFirstChild("RightHand")
-
-if hand then
-	local part = Instance.new("Part")
-	part.Name = "CarriedBlock"
-	part.Size = Vector3.new(2,2,2)
-	part.Color = Color3.fromRGB(0, 0, 255)
-	part.Anchored = false
-	part.CanCollide = false
-	part.Parent = character
-
-	part.CFrame = hand.CFrame * CFrame.new(0, 0, -1)
-
-	local weld = Instance.new("WeldConstraint")
-	weld.Part0 = hand
-	weld.Part1 = part
-	weld.Parent = part
 end
-end)
