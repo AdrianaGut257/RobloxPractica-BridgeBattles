@@ -38,8 +38,13 @@ for _, part in ipairs(cubitos:GetChildren()) do
 				weld.Part0 = hand
 				weld.Part1 = newPart
 				weld.Parent = newPart
-			end
 
+				newPart.AncestryChanged:Connect(function()
+					if not newPart.Parent then
+						recogido = false
+					end
+				end)
+			end
 		end)
 
 	end
