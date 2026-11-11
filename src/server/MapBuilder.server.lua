@@ -89,7 +89,8 @@ mapa.Name = "MapaEjemplo"
 crearIsla("IslaInicio", -20, BORDE_INICIO, mapa)
 crearIsla("IslaMeta", FIN_PUENTE, FIN_PUENTE + 30, mapa)
 
-local lava = crearParte({
+-- Lava.server.lua se encarga de que mate al tocarla
+crearParte({
 	Name = "Lava",
 	Size = Vector3.new(512, 1, 512),
 	Position = Vector3.new(0, 0.5, 0),
@@ -97,13 +98,6 @@ local lava = crearParte({
 	Material = Enum.Material.CrackedLava,
 	Parent = mapa,
 })
-lava.Touched:Connect(function(hit)
-	local character = hit:FindFirstAncestorOfClass("Model")
-	local humanoid = character and character:FindFirstChildOfClass("Humanoid")
-	if humanoid then
-		humanoid.Health = 0
-	end
-end)
 
 local metaX = FIN_PUENTE + 18
 crearParte({
